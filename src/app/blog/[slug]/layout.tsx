@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
 import { getBlogPostBySlug } from "@/lib/contentful";
 
-type LayoutProps = {
-  params: { slug: string } | Promise<{ slug: string }>;
-  children: React.ReactNode;
-};
-
 export async function generateMetadata({
   params,
-}: Pick<LayoutProps, "params">): Promise<Metadata> {
-  const resolvedParams = await params;
-  const post = await getBlogPostBySlug(resolvedParams.slug);
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {
     return {
@@ -28,6 +24,10 @@ export async function generateMetadata({
   };
 }
 
-export default function BlogPostLayout({ children }: Pick<LayoutProps, "children">) {
+export default function BlogPostLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <>{children}</>;
 }
